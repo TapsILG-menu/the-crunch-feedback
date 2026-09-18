@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Crunch — Feedback</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #241209;
+    --bg-panel: #33190f;
+    --bg-panel-2: #3d2013;
+    --gold: #f2a93b;
+    --gold-deep: #d98a1f;
+    --chili: #e2472f;
+    --chili-deep: #c23623;
+    --cream: #fbeee0;
+    --muted: #d8b79a;
+    --muted-dim: #a9856a;
+    --line: rgba(251, 238, 224, 0.14);
+    --focus: #ffd88a;
+    --shadow: rgba(15, 6, 2, 0.45);
+  }
+
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+      --bg: #fbeee0;
+      --bg-panel: #ffffff;
+      --bg-panel-2: #fff6ea;
+      --cream: #2b160b;
+      --muted: #6b4a34;
+      --muted-dim: #8a6a52;
+      --line: rgba(43, 22, 11, 0.14);
+      --shadow: rgba(43, 22, 11, 0.14);
+    }
+  }
+  :root[data-theme="light"] {
+    --bg: #fbeee0;
+    --bg-panel: #ffffff;
+    --bg-panel-2: #fff6ea;
+    --cream: #2b160b;
+    --muted: #6b4a34;
+    --muted-dim: #8a6a52;
+    --line: rgba(43, 22, 11, 0.14);
+    --shadow: rgba(43, 22, 11, 0.14);
+  }
+  :root[data-theme="dark"] {
+    --bg: #241209;
+    --bg-panel: #33190f;
+    --bg-panel-2: #3d2013;
+    --cream: #fbeee0;
+    --muted: #d8b79a;
+    --muted-dim: #a9856a;
+    --line: rgba(251, 238, 224, 0.14);
+    --shadow: rgba(15, 6, 2, 0.45);
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    min-height: 100%;
+  }
+
+  body {
+    background:
+      radial-gradient(ellipse 60% 40% at 15% 0%, rgba(242, 169, 59, 0.16), transparent 60%),
+      radial-gradient(ellipse 50% 35% at 100% 100%, rgba(226, 71, 47, 0.12), transparent 60%),
+      var(--bg);
+    color: var(--cream);
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    padding: 0;
+  }
+
+  .wrap {
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 48px 22px 64px;
+  }
+
+  .mark {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 34px;
+  }
+  .mark-crumb {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    background: var(--gold);
+    transform: rotate(20deg);
+    flex-shrink: 0;
+  }
+  .mark-name {
+    font-family: "Baloo 2", sans-serif;
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--muted);
+    letter-spacing: 0.01em;
+  }
+
+  h1 {
+    font-family: "Baloo 2", sans-serif;
+    font-weight: 800;
+    font-size: clamp(2.1rem, 8vw, 2.9rem);
+    line-height: 1.08;
+    margin: 0 0 14px;
+    color: var(--cream);
+    max-width: 11ch;
+  }
+
+  .lede {
+    font-size: 1.05rem;
+    color: var(--muted);
+    max-width: 42ch;
+    margin: 0 0 38px;
+  }
+
+  .lede strong { color: var(--cream); font-weight: 600; }
+
+  section.card {
+    background: var(--bg-panel);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 26px 22px;
+    margin-bottom: 18px;
+    box-shadow: 0 12px 30px -18px var(--shadow);
+  }
+
+  label.field-label {
+    display: block;
+    font-weight: 600;
+    font-size: 0.98rem;
+    color: var(--cream);
+    margin-bottom: 14px;
+  }
+
+  .stars {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 6px;
+  }
+  .star-btn {
+    background: none;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    line-height: 0;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .star-btn svg {
+    width: 42px;
+    height: 42px;
+    transition: transform 0.12s ease;
+  }
+  .star-btn:active svg { transform: scale(0.88); }
+  .star-btn path {
+    fill: var(--bg-panel-2);
+    stroke: var(--muted-dim);
+    stroke-width: 1.4;
+    transition: fill 0.15s ease, stroke 0.15s ease;
+  }
+  .star-btn.lit path {
+    fill: var(--gold);
+    stroke: var(--gold-deep);
+  }
+  .star-hint {
+    font-size: 0.88rem;
+    color: var(--muted-dim);
+    min-height: 1.3em;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-top: 18px;
+  }
+  .tag-btn {
+    font-family: inherit;
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--muted);
+    background: transparent;
+    border: 1.5px solid var(--line);
+    border-radius: 100px;
+    padding: 9px 16px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .tag-btn.active {
+    color: var(--bg);
+    background: var(--gold);
+    border-color: var(--gold);
+    font-weight: 600;
+  }
+
+  textarea {
+    width: 100%;
+    resize: vertical;
+    min-height: 110px;
+    margin-top: 18px;
+    background: var(--bg-panel-2);
+    border: 1.5px solid var(--line);
+    border-radius: 14px;
+    color: var(--cream);
+    font-family: inherit;
+    font-size: 1rem;
+    padding: 14px 16px;
+  }
+  textarea::placeholder { color: var(--muted-dim); }
+  textarea:focus, .star-btn:focus-visible, .tag-btn:focus-visible, button.submit:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  .name-row {
+    margin-top: 18px;
+  }
+  .name-row input {
+    width: 100%;
+    background: var(--bg-panel-2);
+    border: 1.5px solid var(--line);
+    border-radius: 14px;
+    color: var(--cream);
+    font-family: inherit;
+    font-size: 1rem;
+    padding: 12px 16px;
+  }
+  .name-row input::placeholder { color: var(--muted-dim); }
+
+  button.submit {
+    width: 100%;
+    margin-top: 22px;
+    background: var(--chili);
+    color: #fff8ef;
+    border: none;
+    border-radius: 14px;
+    font-family: "Baloo 2", sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    padding: 16px;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.08s ease;
+  }
+  button.submit:hover { background: var(--chili-deep); }
+  button.submit:active { transform: scale(0.985); }
+  button.submit:disabled {
+    background: var(--bg-panel-2);
+    color: var(--muted-dim);
+    cursor: not-allowed;
+  }
+
+  .note {
+    font-size: 0.85rem;
+    color: var(--muted-dim);
+    text-align: center;
+    margin-top: 14px;
+  }
+
+  .status {
+    display: none;
+    margin-top: 18px;
+    padding: 16px 18px;
+    border-radius: 14px;
+    background: var(--bg-panel-2);
+    border: 1.5px solid var(--gold-deep);
+    font-size: 0.95rem;
+    color: var(--cream);
+  }
+  .status.show { display: block; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="mark">
+    <span class="mark-crumb" aria-hidden="true"></span>
+    <span class="mark-name">The Crunch</span>
+  </div>
+
+  <h1>How was your crunch today?</h1>
+  <p class="lede">Tell us straight — the good, the bad, the "you're out of pinakurat again." <strong>It goes directly to the owner</strong>, not a comments box nobody reads.</p>
+
+  <section class="card">
+    <label class="field-label" for="star-group">Rate your visit</label>
+    <div class="stars" id="star-group" role="radiogroup" aria-label="Star rating">
+      <!-- stars injected by JS -->
+    </div>
+    <div class="star-hint" id="star-hint" aria-live="polite"></div>
+
+    <div class="tags" id="tag-group" aria-label="What was this about? (optional, pick any)">
+      <button type="button" class="tag-btn" data-tag="Food">Food</button>
+      <button type="button" class="tag-btn" data-tag="Service">Service</button>
+      <button type="button" class="tag-btn" data-tag="Speed">Speed</button>
+      <button type="button" class="tag-btn" data-tag="Value">Value</button>
+      <button type="button" class="tag-btn" data-tag="Cleanliness">Cleanliness</button>
+    </div>
+
+    <textarea id="comment" placeholder="What happened? Anything we should fix or keep doing?"></textarea>
+
+    <div class="name-row">
+      <input id="visitor-name" type="text" placeholder="Your name (optional)">
+    </div>
+
+    <button type="button" class="submit" id="submit-btn">Send feedback</button>
+    <p class="note">Goes straight into her review list — no email needed.</p>
+
+    <div class="status" id="status" role="status"></div>
+  </section>
+
+</div>
+
+<script>
+  // 1. Set up the Google Sheet + Apps Script (see setup steps).
+  // 2. Deploy the Apps Script as a Web App and copy its URL.
+  // 3. Paste that URL below, replacing the placeholder.
+  const SHEET_ENDPOINT = "https://script.google.com/macros/s/AKfycbwaltzWSP8KwGEnJpmHN_i62VLaP4mT6UFVKfWize8eJB9ALTaJ9i9I3FTc_ik6qJzNAg/exec";
+
+  const starGroup = document.getElementById('star-group');
+  const starHint = document.getElementById('star-hint');
+  const tagGroup = document.getElementById('tag-group');
+  const comment = document.getElementById('comment');
+  const nameField = document.getElementById('visitor-name');
+  const submitBtn = document.getElementById('submit-btn');
+  const status = document.getElementById('status');
+
+  const STAR_PATH = "M12 2.5l2.9 6.06 6.6.78-4.9 4.56 1.28 6.56L12 17.3l-5.88 3.16 1.28-6.56-4.9-4.56 6.6-.78z";
+  const labels = ["", "Rough visit", "Not great", "Okay", "Good", "Loved it"];
+  let rating = 0;
+  const selectedTags = new Set();
+
+  for (let i = 1; i <= 5; i++) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'star-btn';
+    btn.setAttribute('role', 'radio');
+    btn.setAttribute('aria-checked', 'false');
+    btn.setAttribute('aria-label', i + ' star' + (i > 1 ? 's' : ''));
+    btn.dataset.value = i;
+    btn.innerHTML = '<svg viewBox="0 0 24 24"><path d="' + STAR_PATH + '"/></svg>';
+    btn.addEventListener('click', () => setRating(i));
+    starGroup.appendChild(btn);
+  }
+
+  function setRating(value) {
+    rating = value;
+    [...starGroup.children].forEach((btn, idx) => {
+      const lit = idx < value;
+      btn.classList.toggle('lit', lit);
+      btn.setAttribute('aria-checked', lit ? 'true' : 'false');
+    });
+    starHint.textContent = labels[value];
+  }
+
+  tagGroup.addEventListener('click', (e) => {
+    const btn = e.target.closest('.tag-btn');
+    if (!btn) return;
+    const tag = btn.dataset.tag;
+    if (selectedTags.has(tag)) {
+      selectedTags.delete(tag);
+      btn.classList.remove('active');
+    } else {
+      selectedTags.add(tag);
+      btn.classList.add('active');
+    }
+  });
+
+  submitBtn.addEventListener('click', async () => {
+    if (rating === 0 && comment.value.trim() === '') {
+      status.textContent = "Add a rating or a quick note first — either one works.";
+      status.classList.add('show');
+      return;
+    }
+
+    const stars = rating > 0 ? "★".repeat(rating) + "☆".repeat(5 - rating) + " (" + rating + "/5)" : "Not rated";
+    const tags = selectedTags.size ? [...selectedTags].join(", ") : "None selected";
+    const name = nameField.value.trim() || "Anonymous customer";
+    const note = comment.value.trim() || "(no written comment)";
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Sending...";
+
+    try {
+      await fetch(SHEET_ENDPOINT, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({
+          name: name,
+          rating: stars,
+          topics: tags,
+          comment: note
+        })
+      });
+
+      // "no-cors" mode means we can't read the actual response, so a
+      // successful network request (no thrown error) is treated as a win.
+      status.textContent = "Thanks — that's been added to the list.";
+      status.classList.add('show');
+      // reset the form for the next customer
+      rating = 0;
+      [...starGroup.children].forEach(btn => { btn.classList.remove('lit'); btn.setAttribute('aria-checked', 'false'); });
+      starHint.textContent = "";
+      selectedTags.clear();
+      [...tagGroup.children].forEach(btn => btn.classList.remove('active'));
+      comment.value = "";
+      nameField.value = "";
+    } catch (err) {
+      status.textContent = "Couldn't connect — check your internet and try again.";
+      status.classList.add('show');
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Send feedback";
+    }
+  });
+</script>
+</body>
+</html>
